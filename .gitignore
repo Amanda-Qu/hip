@@ -1,0 +1,19 @@
+# Downloaded model data and generated intermediate meshes are reproducible.
+bone-assets/*.stl
+bone-assets/*.npz
+bone-assets/*.json
+bone-assets/*.txt
+bone-assets/mesh-deps/
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+
+# Local visual checks and development previews.
+/*.png
+/check-*.cjs
+/hip-preview.html
+/export-check.cjs
+/qa-output/
+.DS_Store
+Thumbs.db
