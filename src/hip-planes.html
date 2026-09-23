@@ -20,13 +20,22 @@
   </div>
   <div class="hip-comparison" data-pane="motion">
   <div class="hip-stage">
+    <div class="hip-bone-heading"><span>动作演示</span><span class="hip-phase text-small text-muted" id="hip-phase">向前抬腿 · 屈髋</span></div>
     <svg id="hip-stage-svg" role="img" aria-labelledby="hip-svg-title hip-svg-desc">
       <title id="hip-svg-title">髋关节三个平面及训练动作动画</title>
       <desc id="hip-svg-desc">透明片显示参考平面，彩色腿显示运动方向，地面箭头显示身体前方。高亮区域标示选中的肌肉，包括深层肌肉的投影。可以切换肌肉、演示、视角，暂停或拖动进度。</desc>
       <g id="hip-drawing"></g>
     </svg>
-    <div class="hip-phase" id="hip-phase">向前抬腿 · 屈髋</div>
     <div class="hip-detail" id="hip-detail" aria-live="polite">平面分左右 ｜ 腿沿平面前后摆</div>
+    <div class="hip-muscles">
+      <div class="hip-subheading">本动作关键肌群 <span class="text-small text-muted">点击查看作用</span></div>
+      <div id="hip-muscle-options" class="viz-controls" aria-label="查看关键肌群"></div>
+      <div class="hip-muscle-readout">
+        <div id="hip-muscle-location" class="text-small text-muted"></div>
+        <div id="hip-muscle-state" class="hip-state"></div>
+        <div id="hip-muscle-note" class="text-small"></div>
+      </div>
+    </div>
     <div class="hip-cues">
       <div class="hip-subheading">动作要义</div>
       <ol id="hip-cues-list"></ol>
@@ -38,9 +47,9 @@
       <canvas id="hip-bone-canvas" role="img" aria-label="骨盆、髋臼、股骨头和股骨颈的三维参考模型，与小人动作同步"></canvas>
       <svg id="hip-bone-labels" aria-hidden="true"></svg>
     </div>
-    <div class="viz-controls"><button id="hip-add-muscles" type="button" class="btn" aria-expanded="false" aria-controls="hip-bone-muscle-options">添加肌肉</button><button id="hip-bones-only" type="button" class="btn btn-ghost" disabled>仅看骨头</button><label class="form-check"><input id="hip-bone-cutaway" type="checkbox" class="form-check-input" checked><span class="form-check-label">髋臼局部透视</span></label></div>
-    <div id="hip-bone-muscle-options" hidden>
-      <div class="viz-controls" role="group" aria-label="添加右髋肌肉，可多选">
+    <div class="hip-bone-heading hip-bone-muscle-heading"><span>骨骼模型肌肉 <span class="text-small text-muted">勾选显示 · 可多选</span></span><button id="hip-bones-only" type="button" class="btn btn-ghost" disabled>仅看骨头</button></div>
+    <div id="hip-bone-muscle-options">
+      <div class="hip-anatomy-choices" role="group" aria-label="显示右髋模型肌肉，可多选">
         <label class="form-check"><input type="checkbox" class="form-check-input" data-anatomy-muscle="max"><span class="form-check-label">臀大肌</span></label>
         <label class="form-check"><input type="checkbox" class="form-check-input" data-anatomy-muscle="med"><span class="form-check-label">臀中肌</span></label>
         <label class="form-check"><input type="checkbox" class="form-check-input" data-anatomy-muscle="min"><span class="form-check-label">臀小肌</span></label>
@@ -48,19 +57,11 @@
         <label class="form-check"><input type="checkbox" class="form-check-input" data-anatomy-muscle="flexor"><span class="form-check-label">髂腰肌</span></label>
         <label class="form-check"><input type="checkbox" class="form-check-input" data-anatomy-muscle="adduct"><span class="form-check-label">内收短肌</span></label>
       </div>
-      <div class="text-small text-muted">展示右髋；单独选择可看清深层肌肉。髂腰肌仅展示髋旁段。</div>
+      <div class="text-small text-muted">勾选后显示在右髋模型；肌肉作用见「动作与要义」。单独选择可看清深层肌肉，髂腰肌仅展示髋旁段。</div>
     </div>
+    <div class="viz-controls hip-bone-view-options"><label class="form-check"><input id="hip-bone-cutaway" type="checkbox" class="form-check-input" checked><span class="form-check-label">髋臼局部透视</span></label></div>
     <div id="hip-bone-muscle-status" class="text-small" aria-live="polite">纯骨骼</div>
     <div id="hip-bone-motion" class="text-small">骨盆相对稳住 · 股骨前后摆</div>
-    <div class="hip-muscles">
-      <div class="hip-subheading">关键肌肉 <span class="text-small text-muted">点击切换</span></div>
-      <div id="hip-muscle-options" class="viz-controls" aria-label="查看关键肌肉"></div>
-      <div class="hip-muscle-readout">
-        <div id="hip-muscle-location" class="text-small text-muted"></div>
-        <div id="hip-muscle-state" class="hip-state"></div>
-        <div id="hip-muscle-note" class="text-small"></div>
-      </div>
-    </div>
   </div>
   </div>
   <div class="hip-motion-controls">
@@ -88,31 +89,36 @@
   #hip-motion-lab .hip-comparison { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.08fr); gap:16px; margin-top:8px; }
   #hip-motion-lab .hip-mobile-panes { display:none; }
   #hip-motion-lab .hip-bone-panel { min-width:0; }
-  #hip-motion-lab .hip-bone-heading { display:flex; justify-content:space-between; gap:8px; margin:10px 0 0; }
+  #hip-motion-lab .hip-bone-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:10px 0 0; }
+  #hip-motion-lab .hip-bone-muscle-heading { margin-top:14px; }
+  #hip-motion-lab .hip-bone-muscle-heading > span { min-width:0; }
+  #hip-motion-lab .hip-bone-muscle-heading .text-small { margin-left:8px; }
+  #hip-motion-lab .hip-bone-view-options { margin-top:10px; }
   #hip-motion-lab #hip-bone-stage { position:relative; height:332px; }
   #hip-motion-lab #hip-bone-canvas { width:100%; height:100%; display:block; }
   #hip-motion-lab #hip-bone-labels { width:100%; height:100%; position:absolute; inset:0; pointer-events:none; overflow:hidden; }
   #hip-motion-lab #hip-bone-motion { margin-top:8px; min-height:2em; }
   #hip-motion-lab #hip-bone-muscle-options { margin-top:8px; }
+  #hip-motion-lab .hip-anatomy-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px 8px; margin-bottom:8px; }
   #hip-motion-lab #hip-bone-muscle-status { margin-top:8px; }
   #hip-motion-lab .hip-bone-source { margin-top:18px; }
-  @media(max-width:620px) { #hip-motion-lab .hip-comparison { grid-template-columns:minmax(0,1fr); gap:4px; } #hip-motion-lab #hip-bone-stage { height:340px; } }
+  @media(max-width:620px) { #hip-motion-lab .hip-comparison { grid-template-columns:minmax(0,1fr); gap:4px; } #hip-motion-lab #hip-bone-stage { height:340px; } #hip-motion-lab .hip-anatomy-choices { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   #hip-motion-lab .hip-exercises { margin-top:8px; }
   #hip-motion-lab .hip-heading { display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-top:18px; }
   #hip-motion-lab h2 { margin:0; }
   #hip-motion-lab .hip-stage { position:relative; margin-top:8px; }
   #hip-motion-lab #hip-stage-svg { display:block; width:100%; height:370px; overflow:hidden; }
-  #hip-motion-lab .hip-phase { position:absolute; top:10px; left:0; pointer-events:none; color:var(--foreground); }
+  #hip-motion-lab .hip-phase { text-align:right; }
   #hip-motion-lab .hip-detail { margin:6px 0 0; min-height:1.5em; color:var(--foreground); }
   #hip-motion-lab .hip-toolbar { margin-bottom:12px; }
   #hip-motion-lab .hip-label { fill:var(--foreground); font:inherit; }
   #hip-motion-lab .hip-small-label { fill:var(--muted-foreground); font:inherit; }
-  #hip-motion-lab .hip-muscles { margin-top:14px; }
+  #hip-motion-lab .hip-muscles { margin-top:18px; }
   #hip-motion-lab .hip-subheading { margin-bottom:8px; font-weight:500; }
   #hip-motion-lab .hip-subheading span { margin-left:8px; font-weight:400; }
   #hip-motion-lab .hip-muscle-readout { margin-top:12px; }
   #hip-motion-lab .hip-state { margin:6px 0; font-weight:500; }
-  #hip-motion-lab .hip-cues { margin-top:18px; }
+  #hip-motion-lab .hip-cues { margin-top:22px; }
   #hip-motion-lab .hip-cues ol { margin:0; padding-left:22px; }
   #hip-motion-lab .hip-cues li { margin:5px 0; }
   @media(max-width:620px) {
@@ -494,8 +500,8 @@
     over.push(`<path d="M12,${fmt(labelY+9)} L${fmt(lineEnd)},${fmt(labelY+9)} L${fmt(target[0])},${fmt(target[1])}" fill="none" stroke="${MUT}" stroke-width="1" opacity=".75"/><circle cx="${fmt(target[0])}" cy="${fmt(target[1])}" r="3" fill="${muscleColors[status.kind]}"/><text x="12" y="${fmt(labelY)}" class="hip-label">${labelText}</text>`);
   }
   function updateMuscleReadout(status) {
-    // Keep the phase-dependent explanation beside the anatomical muscle controls.
-    // Only update changed text; the separate muscle-length illustration was removed.
+    // Keep the phase-dependent explanation with the left-hand action muscle buttons.
+    // Only update changed text; animation frames need not rewrite the same DOM nodes.
     const def=muscleDefs[focusByScene[scene]],key=scene+focusByScene[scene]+status.text+status.note;
     if(key!==lastMuscleUI) {
       $('#hip-muscle-location').textContent=def.area;
@@ -519,8 +525,8 @@
     const cpu=gl?null:canvas.getContext('2d');
     const meshes={};let colorStamp=0,colors=null,lastCPU=-1;
     const muscleNames={max:'臀大肌',med:'臀中肌',min:'臀小肌',pir:'梨状肌',flexor:'髂腰肌',adduct:'内收短肌'};
-    const selected=new Set();let focused=null,optionsOpen=false;
-    const optionBox=$('#hip-bone-muscle-options'),addButton=$('#hip-add-muscles'),bonesOnly=$('#hip-bones-only');
+    const selected=new Set();let focused=null;
+    const optionBox=$('#hip-bone-muscle-options'),bonesOnly=$('#hip-bones-only');
     const decode=(s,Type)=>{
       const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0));return new Type(bytes.buffer);
     };
@@ -738,13 +744,12 @@
       canvas.setAttribute('data-contact-error',norm(sub(socket,ballCenter)).toExponential(2));
     }
     function syncOptions() {
-      optionBox.hidden=!optionsOpen;addButton.setAttribute('aria-expanded',String(optionsOpen));
-      addButton.textContent=optionsOpen?'收起肌肉选项':'添加肌肉';bonesOnly.disabled=selected.size===0;
+      // Keep all model muscle choices visible; only the selected meshes change.
+      bonesOnly.disabled=selected.size===0;
       root.querySelectorAll('[data-anatomy-muscle]').forEach(input=>input.checked=selected.has(input.dataset.anatomyMuscle));
       $('#hip-bone-muscle-status').textContent=selected.size?`右髋 · 已选 ${selected.size} 组肌肉 · 随动作形变`:'纯骨骼';
       canvas.setAttribute('aria-label','骨盆与股骨近端同步三维模型。'+(selected.size?'显示右髋：'+Array.from(selected,k=>muscleNames[k]).join('、'):'未添加肌肉'));
     }
-    addButton.addEventListener('click',()=>{optionsOpen=!optionsOpen;syncOptions();save();});
     bonesOnly.addEventListener('click',()=>{selected.clear();focused=null;syncOptions();lastCPU=-1;draw();save();});
     optionBox.addEventListener('change',event=>{
       const key=event.target.dataset.anatomyMuscle;if(!muscleNames[key])return;
@@ -755,12 +760,11 @@
     cutaway.addEventListener('change',()=>{draw();save();});
     syncOptions();
     return {draw,cutaway,
-      state:()=>({anatomyMuscles:Array.from(selected),anatomyFocused:focused,anatomyOptionsOpen:optionsOpen}),
+      state:()=>({anatomyMuscles:Array.from(selected),anatomyFocused:focused}),
       names:()=>Array.from(selected,k=>muscleNames[k]),
       restore:s=>{
         if(Array.isArray(s.anatomyMuscles)){selected.clear();s.anatomyMuscles.forEach(k=>{if(muscleNames[k])selected.add(k);});}
         focused=selected.has(s.anatomyFocused)?s.anatomyFocused:Array.from(selected).at(-1)||null;
-        if(typeof s.anatomyOptionsOpen==='boolean')optionsOpen=s.anatomyOptionsOpen;
         syncOptions();lastCPU=-1;
       }
     };
